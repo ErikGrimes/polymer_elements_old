@@ -1,0 +1,4 @@
+name: polymer_elements
+description: A Dart port of polymer elements (https://github.com/Polymer/polymer-elements).
+dependencies:
+  polymer: any
