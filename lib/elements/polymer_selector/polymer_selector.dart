@@ -1,4 +1,4 @@
-library polymer_selection;
+library polymer_selector;
 
 import 'dart:html';
 import 'dart:async';

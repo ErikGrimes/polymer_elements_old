@@ -1,7 +1,7 @@
 library selector_examples;
 
 import 'dart:html';
-import 'polymer_selection.dart';
+import 'package:polymer_elements/elements/polymer_selector/polymer_selector.dart';
 import 'package:polymer/polymer.dart';
 
 @CustomTag('selector-examples')
