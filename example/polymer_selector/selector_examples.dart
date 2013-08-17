@@ -12,6 +12,8 @@ class SelectorExamples extends PolymerElement with ObservableMixin {
   ObservableList multiSelected = new ObservableList.from(['1', '3']);
   
   ObservableBox color = new ObservableBox('green');
+  
+  ObservableBox emptyObservableString = new ObservableBox("");
  
   @observable
   String latestActivate;

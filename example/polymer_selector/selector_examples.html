@@ -39,6 +39,34 @@
     }
     </style>
 
+  <h2>single select without selected</h2>
+    <polymer-selector class="list">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+ </polymer-selector>
+
+
+      <h2>single select with selected empty</h2>
+    <polymer-selector class="list" selected="{{""}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
+
+  <h2>multi select without selected</h2>
+    <polymer-selector class="list" multi="{{true}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
+
   <!-- polymer.js supports literal syntax without the mustaches -->
 
   <h2>single select initialized with literal</h2>
@@ -59,6 +87,16 @@
     <div>Item 4</div>
     selected: {{observableString.value}}
     </polymer-selector>
+    
+         <h2>single select initialized with empty ObservableBox</h2>
+    <polymer-selector class="list" selected="{{emptyObservableString}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    selected: {{emptyObservableString.value}}
+    </polymer-selector>
 
   <!-- polymer.js supports <polymer-select multi> -->
 
@@ -70,7 +108,6 @@
     <div>Item 3</div>
     <div>Item 4</div>
     </polymer-selector>
-
 
     <h2>multi-selection with ObservableList</h2>
     <polymer-selector class='list' selected='{{multiSelected}}' multi='{{true}}'>
@@ -90,7 +127,6 @@
     </div>
     </template>
     
- 
     <h2>list</h2>
     <polymer-selector selected="{{'0'}}" items-selector="{{'li'}}">  
      <ul id='list'>
@@ -102,9 +138,10 @@
     </ul>
      
     </polymer-selector>
-     
+   
   
   <!-- polymer supports passing observables without observablebox -->
+
 
     <h2>binding of a group of radio buttons to a variable</h2>
     <polymer-selector items-selector='{{"input[type=radio]"}}' 

@@ -76,27 +76,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   set selectedItem(value){
     _selectedItem = notifyPropertyChange(SELECTED_ITEM, _selectedItem, value);
   }
-  
-  _selectedFromValue(Object value){
-    if(value is String){
-    var values = value.split(' ');
-    if(this.multi){
-      return new ObservableList(values);
-    }else {
-      return new ObservableBox(value);
-    }
-    } else if (value is Observable){
-    return value;
-    } else {
-    throw 'Selected should be a literal String, literal String list, ObservableBox<String> or ObservableList<String>';
-    }
-  
-  }
-  
-  created() {
-    super.created();
-  }
-  
+ 
   inserted(){
     _selection = this.shadowRoot.query('#selection').xtag;
     
@@ -108,7 +88,8 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
      * attribute binding
      */
     _selection.multi = multi;
-   
+  
+    _validateSelected();
     this.changes.listen(_update);
     
   }
@@ -181,14 +162,20 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _validateSelected(){
-    if(selected is String){
-      var values = selected.split(' ');
+    if(this._selected == null){
       if(this.multi){
-        selected = new ObservableList.from(values);
+        _selected = new ObservableList();
       }else {
-        selected = new ObservableBox(selected);   
+        _selected = new ObservableBox();
       }
-    } else if (selected is! ObservableBox && selected is! ObservableList){
+     } else if(_selected is String){
+      var values = _selected.split(' ');
+      if(this.multi){
+        _selected = new ObservableList.from(values);
+      }else {
+        _selected = new ObservableBox(_selected);   
+      }
+    } else if (_selected is! ObservableBox && _selected is! ObservableList){
       throw 'selected should be a literal String, literal String list, ObservableBox<String> or ObservableList<String>';
     }
     
@@ -204,6 +191,10 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _valueToSelection(value) {
+    if(value is ObservableBox){
+      value = value.value;
+    }
+    if(value is String && value.isEmpty) return;
     var item = (value == null) ? 
       null : this.items[this._valueToIndex(value)];
     this.selectedItem = item;
@@ -211,9 +202,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _valueToIndex(value) {
-    if(value is ObservableBox){
-      value = value.value;
-    }
+  
     for (var i=0, items=this.items; i< items.length; i++) {
         if (this._valueForNode(items[i]) == value) {
         return i;
