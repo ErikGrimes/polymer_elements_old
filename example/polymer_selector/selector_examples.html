@@ -177,7 +177,16 @@
     </template>
     </polymer-selector>
   
-
+      <h2>binding of a group of checkboxes to a variable</h2>
+    <polymer-selector items-selector='{{"input[type=checkbox]"}}' 
+      selected='{{checkboxColor}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
+      activate-event='{{"click"}}' 
+       selected-is-attribute='{{false}}'>
+      <label><input type='checkbox' name='checkboxColor' value='red'> Red</label> <br>
+    <label><input type='checkbox' name='checkboxColor' value='green'> Green</label> <br>
+    <label><input type='checkbox' name='checkboxColor' value='blue'> Blue</label> <br>
+    <p>color = {{checkboxColor.value}}</p>   
+    </polymer-selector>
     
   </template>
 
