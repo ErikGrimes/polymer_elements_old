@@ -21,17 +21,17 @@ class SelectorExamples extends PolymerElement with ObservableMixin {
   var latestSelect;
   
   activate(item){
-    latestActivate = item.attributes['value'];
-    Observable.dirtyCheck();
+	latestActivate = item.attributes['value'];
+	Observable.dirtyCheck();
   }
   
   select(item){
-    latestSelect = item;
-    Observable.dirtyCheck();
+	latestSelect = item;
+	Observable.dirtyCheck();
   }
   
   created(){
-    super.created();
+	super.created();
   }
   
 }
