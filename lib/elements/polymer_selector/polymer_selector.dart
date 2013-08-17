@@ -24,32 +24,35 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   
   static const Symbol TARGET = const Symbol('target');
   
+  //TODO polymer.js uses tap, but tap doesn't exist yet 
+  String activateEvent = 'click';
+  
+  String itemsSelector = '';
+  
+  bool multi = false;
+  
+  bool notap = false;
+  
+  String selectedClass = 'polymer-selected';
+  
+  String selectedProperty = 'active';
+  
+  String valueattr = 'name';
+
+  var selectedModel;
+  
   var onPolymerSelect;
   
   var onPolymerActivate;
   
-  Object _selected = null;
+  Element _target;
   
-  bool multi = false;
+  Element __target;
+  
+  //TODO types for _selected, _selectedItem, selectedModel?
+  var _selected;
    
-  String valueattr = 'name';
-  
-  String selectedClass = 'polymer-selected';
-   
-  String selectedProperty = 'active';
-  
-  Object _selectedItem = null;
-  
-  Object selectedModel = null;
-  
-  Element _target = null;
-  
-  String itemsSelector = '';
-  
-  //TODO polymer uses tap, but tap doesn't exist yet 
-  String activateEvent = 'click';
-  
-  bool notap = false;
+  Element _selectedItem;
   
   //TODO using PolymerSelection here throws a type exception
   var _selection;
@@ -59,22 +62,18 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   get target => _target;
   
   set target(Element value){
-    if(_target != null){
-    this._removeListener(_target);
-    }
-    this._addListener(value);
     _target = notifyPropertyChange(TARGET, _target, value);
   }
   
   get selected => _selected;
   
-  set selected(Object value){
+  set selected(value){
     _selected = notifyPropertyChange(SELECTED, _selected, value);
   }
   
-  Object get selectedItem => _selectedItem;
+  get selectedItem => _selectedItem;
   
-  set selectedItem(Object value){
+  set selectedItem(value){
     _selectedItem = notifyPropertyChange(SELECTED_ITEM, _selectedItem, value);
   }
   
@@ -100,8 +99,9 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   
   inserted(){
     _selection = this.shadowRoot.query('#selection').xtag;
+    
     if(this.target == null){
-    this.target = this;
+      this.target = this;
     }
     /**
      * TODO have to set this manually because of initialization issues with 
@@ -113,58 +113,59 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
     
   }
   
-   
-  
   get selection => _selection.selection;
   
   //TODO revisit the polymer code - what does the where clause do?
   get items {
     List nodes;
     if(itemsSelector.isNotEmpty){
-    nodes = target.queryAll(itemsSelector);
-    }else {
-    nodes = target.children;
+      nodes = target.queryAll(itemsSelector);
+    } else {
+      nodes = target.children;
     }
     return nodes.where((Element e){
-    return e.localName != 'template';
+      return e.localName != 'template';
     }).toList();     
   }
   
   clearSelection() {
     if (this.multi) {
-    var copy = new List.from(this.selection);
-    copy.forEach((s) {
-      _selection.setItemSelected(s, false);
-    });
+      var copy = new List.from(this.selection);
+      copy.forEach((s) {
+        _selection.setItemSelected(s, false);
+      });
     } else {
-    this._selection.setItemSelected(this.selection, false);
+      this._selection.setItemSelected(this.selection, false);
     }
-    this.selectedItem = null;
-    this._selection.clear();
+      this.selectedItem = null;
+      this._selection.clear();
   }
   
   _update(List<ChangeRecord> records){
     for(var cr in records){
-    if(cr.changes(SELECTED)){
-      _selectedChanged();
-    }
-    if(cr.changes(SELECTED_ITEM)){
-      _selectedItemChanged();  
-    }
+      if(cr.changes(SELECTED)){
+        _selectedChanged();
+      }
+      if(cr.changes(SELECTED_ITEM)){
+        _selectedItemChanged();  
+      }
+      if(cr.changes(TARGET)){
+        _targetChanged();  
+      }
     }
   }
   
   _selectedChanged(){ 
     _validateSelected();
     if (this.multi) {
-    this.clearSelection();
-    if(this.selected != null){
-      this.selected.forEach((s) {
-      this._valueToSelection(s);
-      });
-    } 
-    }else {
-    this._valueToSelection(this.selected);
+      this.clearSelection();
+      if(this.selected != null){
+        this.selected.forEach((s) {
+        this._valueToSelection(s);
+        });
+      } 
+    } else {
+      this._valueToSelection(this.selected);
     }
   }
   
@@ -175,25 +176,24 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
       this.selectedModel = t.model;
     }
     }else {
-    this.selectedModel = null;
+      this.selectedModel = null;
     }
   }
   
   _validateSelected(){
     if(selected is String){
-    var values = selected.split(' ');
-    if(this.multi){
-      selected = new ObservableList.from(values);
-    }else {
-      selected = new ObservableBox(selected);
-     
-    }
+      var values = selected.split(' ');
+      if(this.multi){
+        selected = new ObservableList.from(values);
+      }else {
+        selected = new ObservableBox(selected);   
+      }
     } else if (selected is! ObservableBox && selected is! ObservableList){
-    throw 'selected should be a literal String, literal String list, ObservableBox<String> or ObservableList<String>';
+      throw 'selected should be a literal String, literal String list, ObservableBox<String> or ObservableList<String>';
     }
     
     if(_selectedSub != null){
-    _selectedSub.cancel();
+      _selectedSub.cancel();
     }
     _selectedSub = selected.changes.listen(_observableSelectedChanged);
     
@@ -212,16 +212,16 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   
   _valueToIndex(value) {
     if(value is ObservableBox){
-    value = value.value;
+      value = value.value;
     }
     for (var i=0, items=this.items; i< items.length; i++) {
-    if (this._valueForNode(items[i]) == value) {
-      return i;
-    }
+        if (this._valueForNode(items[i]) == value) {
+        return i;
+      }
     }
     // if no item found, the value itself is probably the index
     if(value is int){
-    return value;
+      return value;
     }
     return int.parse(value);
   }
@@ -230,13 +230,13 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
     return node.attributes[this.valueattr];
   }
   
-  _targetChanged(old) {
-    if (old) {
-    this._removeListener(old);
+  _targetChanged() {
+    if (__target != null) {
+      this._removeListener(__target);
     }
+    __target = target;
     if (this.target != null) {
-    this._removeListener(this);
-    this._addListener(this.target);
+      this._addListener(this.target);
     }
   }
   
@@ -251,39 +251,38 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
 // events fired from <polymer-selection> object
   _selectionSelect(detail) {
     if (detail.item != null) {
-    this._applySelection(detail.item, detail.isSelected);
-    if(onPolymerSelect != null){
-      Timer.run((){onPolymerSelect([detail]);});
-    }
+      this._applySelection(detail.item, detail.isSelected);
+      if(onPolymerSelect != null){
+        runAsync((){onPolymerSelect([detail]);});
+      }
     }
   }
   
   _applySelection(item, isSelected) {
     if (this.selectedClass != null) {
-    item.classes.toggle(this.selectedClass, isSelected);
+      item.classes.toggle(this.selectedClass, isSelected);
     }
     if (this.selectedProperty != null) {
-    item.attributes[this.selectedProperty] = isSelected.toString();
+      item.attributes[this.selectedProperty] = isSelected.toString();
     }
   }
   
   _activateHandler(e) {
     if (!this.notap) {
-    var i = this._findDistributedTarget(e.target, this.items);
-    if (i >= 0) {
-      var item = this.items[i];
-      var s = _valueOrDefault(this._valueForNode(item),i.toString());
-      if (this.multi) {
-      this._addRemoveSelected(s);
-      } else {
-      this.selected.value = s.toString();
-      }
-      if(onPolymerActivate != null){
-      Timer.run((){onPolymerActivate([item]);});
+      var i = this._findDistributedTarget(e.target, this.items);
+      if (i >= 0) {
+        var item = this.items[i];
+        var s = _valueOrDefault(this._valueForNode(item),i.toString());
+        if (this.multi) {
+          this._addRemoveSelected(s);
+        } else {
+          this.selected.value = s.toString();
+        }
+        if(onPolymerActivate != null){
+          Timer.run((){onPolymerActivate([item]);});
       //onPolymerSelect([new PolymerSelectDetail(item, isSelected)]);
-      } 
-    }
-    
+        } 
+      }
     }
   }
   
