@@ -1,6 +1,7 @@
 library polymer_selection;
 
 import 'dart:async';
+import 'dart:mirrors';
 import 'package:polymer/polymer.dart';
 
 /**
@@ -10,8 +11,10 @@ import 'package:polymer/polymer.dart';
  */
   
 class PolymerSelectDetail {
+  
   final bool isSelected;
-  final Object item;
+  final item;
+  
   PolymerSelectDetail(this.item, this.isSelected);
 }
 
@@ -19,62 +22,61 @@ class PolymerSelectDetail {
 @CustomTag('polymer-selection')
 class PolymerSelection extends PolymerElement with ChangeNotifierMixin {
   
-  var onPolymerSelect;
-  
   final List _selection = [];
   
   bool multi = false;
   
+  var onPolymerSelect;
+  
   get selection {
-  if(this.multi){
+    if(this.multi){
      return this._selection;
-  }else if(this._selection.isNotEmpty){
-    return this._selection[0];
-  }else {
-    return null;
-  }
+    } else if(this._selection.isNotEmpty){
+      return this._selection[0];
+    } else {
+      return null;
+    }
   }
 
   isSelected(item){
-  return this.selection.indexOf(item) >= 0;
+    return this.selection.indexOf(item) >= 0;
   }
   
-
   setItemSelected(item, isSelected) {
-  if (item != null) {
-    if (isSelected) {
-    this._selection.add(item);
-    } else {
-    var i = this._selection.indexOf(item);
-    if (i >= 0) {
-      this._selection.removeAt(i);
+    if (item != null) {  
+      if (isSelected) {
+        this._selection.add(item);
+      } else {
+        var i = this._selection.indexOf(item);
+        if (i >= 0) {
+          this._selection.removeAt(i);
+        }
+      }     
+      if(this.onPolymerSelect != null){
+        runAsync((){this.onPolymerSelect([new PolymerSelectDetail(item, isSelected)]);});
+      }    
     }
-    }
-    if(onPolymerSelect != null){
-    Timer.run((){onPolymerSelect([new PolymerSelectDetail(item, isSelected)]);});
-    }
-  }
   }
   
-  select(item) {
-  if (this.multi) {
-    this.toggle(item);
-  } else if (this.selection != item) {
-    this.setItemSelected(this.selection, false);
-    this.setItemSelected(item, true);
+  select(item) { 
+    if (this.multi) {
+      this._toggle(item);
+    } else if (this.selection != item) {
+      this.setItemSelected(this.selection, false);
+      this.setItemSelected(item, true);
+    }
   }
-  }
-  
-  toggle(item) {
-  this.setItemSelected(item, !this.isSelected(item));
-  }
- 
+   
   created(){
-  this.clear();
+    this.clear();
   }
   
   clear(){
-  this._selection.clear();
+    this._selection.clear();
+  }
+  
+  _toggle(item) {
+    this.setItemSelected(item, !this.isSelected(item));
   }
   
 }
