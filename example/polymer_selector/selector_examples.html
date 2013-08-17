@@ -188,6 +188,24 @@
     <p>color = {{checkboxColor.value}}</p>   
     </polymer-selector>
     
+              <h2>binding of a group of checkboxes to a list</h2>
+    <polymer-selector items-selector='{{"input[type=checkbox]"}}' 
+      selected='{{checkboxMulti}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
+      activate-event='{{"click"}}' 
+       selected-is-attribute='{{false}}' multi="{{true}}">
+      <label><input type='checkbox' name='checkboxMulti' value='red'> Red</label> <br>
+    <label><input type='checkbox' name='checkboxMulti' value='green'> Green</label> <br>
+    <label><input type='checkbox' name='checkboxMulti' value='blue'> Blue</label> <br>
+    <h3>selected list</h3>
+    <ul>
+    <template repeat='{{selected in checkboxMulti}}'>
+    <li>
+     {{selected}}
+    </li>
+    </template>
+    </ul>
+    </polymer-selector>
+    
   </template>
 
   <script type='application/dart' src ='selector_examples.dart'>

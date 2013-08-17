@@ -4,6 +4,7 @@ import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
 import 'polymer_selection.dart';
+import 'dart:mirrors';
 
 /**
  * This is a port of https://github.com/Polymer/polymer-elements/blob/stable/polymer-selector/polymer-selector.html
@@ -26,6 +27,8 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   
   //TODO polymer.js uses tap, but tap doesn't exist yet 
   String activateEvent = 'click';
+  
+  bool selectedIsAttribute = true;
   
   String itemsSelector = '';
   
@@ -252,7 +255,11 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
       item.classes.toggle(this.selectedClass, isSelected);
     }
     if (this.selectedProperty != null) {
-      item.attributes[this.selectedProperty] = isSelected.toString();
+      if(selectedIsAttribute){
+        item.attributes[this.selectedProperty] = isSelected.toString();
+      }else {
+        reflect(item).setField(new Symbol(this.selectedProperty), isSelected);
+      }
     }
   }
   
@@ -268,8 +275,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
           this.selected.value = s.toString();
         }
         if(onPolymerActivate != null){
-          Timer.run((){onPolymerActivate([item]);});
-      //onPolymerSelect([new PolymerSelectDetail(item, isSelected)]);
+          runAsync((){onPolymerActivate([item]);});
         } 
       }
     }
