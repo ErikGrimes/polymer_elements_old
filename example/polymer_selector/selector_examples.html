@@ -1,130 +1,130 @@
 <!-- This is a port of https://github.com/Polymer/polymer-elements/blob/stable/polymer-selector/index.html
--->	 
+-->  
 
 <link rel='import' href='packages/polymer_elements/elements/polymer_selector/polymer_selector.html'>
 
  <polymer-element name='selector-examples'>
-	<template>
-	  <style>
-		.list {
-		  display: block;
-		  border: 1px solid #ccc;
-		  border-bottom: none;
-		  background: #666;
-		  color: white;
-		  list-style: none;
-		  margin: 0;
-		  padding: 0;
-		}
-		
-		.list > * {
-		  height: 40px;
-		  line-height: 40px;
-		  padding: 0 20px;
-		  border-bottom: 1px solid #ccc;
-		}
-		
-		.list > *.polymer-selected {
-		  background: #333;
-		}
-		
-		li {
-		  height: 30px;
-		}
-		
-		li.polymer-selected:after {
-		  content: '\2713';
-		  position: absolute;
-		  padding-left: 10px;
-		}
-	  </style>
+  <template>
+    <style>
+    .list {
+      display: block;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      background: #666;
+      color: white;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .list > * {
+      height: 40px;
+      line-height: 40px;
+      padding: 0 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    .list > *.polymer-selected {
+      background: #333;
+    }
+    
+    li {
+      height: 30px;
+    }
+    
+    li.polymer-selected:after {
+      content: '\2713';
+      position: absolute;
+      padding-left: 10px;
+    }
+    </style>
 
   <!-- polymer.js supports literal syntax without the mustaches -->
 
-	<h2>single select initialized with literal</h2>
-	  <polymer-selector class="list" selected="{{'0'}}">
-		<div>Item 0</div>
-		<div>Item 1</div>
-		<div>Item 2</div>
-		<div>Item 3</div>
-		<div>Item 4</div>
-	  </polymer-selector>
+  <h2>single select initialized with literal</h2>
+    <polymer-selector class="list" selected="{{'0'}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
    
-	   <h2>single select initialized with ObservableBox</h2>
-	  <polymer-selector class="list" selected="{{observableString}}">
-		<div>Item 0</div>
-		<div>Item 1</div>
-		<div>Item 2</div>
-		<div>Item 3</div>
-		<div>Item 4</div>
-		selected: {{observableString.value}}
-	  </polymer-selector>
+     <h2>single select initialized with ObservableBox</h2>
+    <polymer-selector class="list" selected="{{observableString}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    selected: {{observableString.value}}
+    </polymer-selector>
 
-	<!-- polymer.js supports <polymer-select multi> -->
+  <!-- polymer.js supports <polymer-select multi> -->
 
-	  <h2>multi select initialized with literal list</h2>
-	  <polymer-selector class="list" selected="{{'0 1'}}" multi="{{true}}">
-		<div>Item 0</div>
-		<div>Item 1</div>
-		<div>Item 2</div>
-		<div>Item 3</div>
-		<div>Item 4</div>
-	  </polymer-selector>
+    <h2>multi select initialized with literal list</h2>
+    <polymer-selector class="list" selected="{{'0 1'}}" multi="{{true}}">
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
 
 
-	  <h2>multi-selection with ObservableList</h2>
-	  <polymer-selector class='list' selected='{{multiSelected}}' multi='{{true}}'>
-		<div>Item 0</div>
-		<div>Item 1</div>
-		<div>Item 2</div>
-		<div>Item 3</div>
-		<div>Item 4</div>
-	  </polymer-selector>
-	  <h3>the binding for an observable list doesn't update</h3>
-	  <div>selected: {{multiSelected}}</div>
-	  
-	  <h3>but templates do</h3>
-	  <template repeat='{{selected in multiSelected}}'>
-		<div>
-		  selected: {{selected}}
-		</div>
-	  </template>
-	  
+    <h2>multi-selection with ObservableList</h2>
+    <polymer-selector class='list' selected='{{multiSelected}}' multi='{{true}}'>
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
+    <h3>the binding for an observable list doesn't update</h3>
+    <div>selected: {{multiSelected}}</div>
+    
+    <h3>but templates do</h3>
+    <template repeat='{{selected in multiSelected}}'>
+    <div>
+      selected: {{selected}}
+    </div>
+    </template>
+    
  
-	  <h2>list</h2>
-	  <polymer-selector selected="{{'0'}}" items-selector="{{'li'}}">	 
-		 <ul id='list'>
-		<li>Item 0</li>
-		<li>Item 1</li>
-		<li>Item 2</li>
-		<li>Item 3</li>
-		<li>Item 4</li>
-	  </ul>
-	   
-		</polymer-selector>
-	   
+    <h2>list</h2>
+    <polymer-selector selected="{{'0'}}" items-selector="{{'li'}}">  
+     <ul id='list'>
+    <li>Item 0</li>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+    <li>Item 4</li>
+    </ul>
+     
+    </polymer-selector>
+     
   
   <!-- polymer supports passing observables without observablebox -->
 
-	  <h2>binding of a group of radio buttons to a variable</h2>
-	  <polymer-selector items-selector='{{"input[type=radio]"}}' 
-		  selected='{{color}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
-		  activate-event='{{"change"}}' on-polymer-activate='{{activate}}' on-polymer-select='{{select}}'>
-			<label><input type='radio' name='color' value='red'> Red</label> <br>
-		<label><input type='radio' name='color' value='green'> Green</label> <br>
-		<label><input type='radio' name='color' value='blue'> Blue</label> <br>
-		<p>color = {{color.value}}</p>	 
-		<p>lastActivate = {{latestActivate}}</p>
-		<template if='{{latestSelect}}'
-		  <div>
-			item: {{latestSelect.item.attributes['value']}} isSelected: {{latestSelect.isSelected}}
-		  </div>
-		</template>
-		</polymer-selector>
-	
+    <h2>binding of a group of radio buttons to a variable</h2>
+    <polymer-selector items-selector='{{"input[type=radio]"}}' 
+      selected='{{color}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
+      activate-event='{{"change"}}' on-polymer-activate='{{activate}}' on-polymer-select='{{select}}'>
+      <label><input type='radio' name='color' value='red'> Red</label> <br>
+    <label><input type='radio' name='color' value='green'> Green</label> <br>
+    <label><input type='radio' name='color' value='blue'> Blue</label> <br>
+    <p>color = {{color.value}}</p>   
+    <p>lastActivate = {{latestActivate}}</p>
+    <template if='{{latestSelect}}'
+      <div>
+      item: {{latestSelect.item.attributes['value']}} isSelected: {{latestSelect.isSelected}}
+      </div>
+    </template>
+    </polymer-selector>
+  
 
-	  
-	</template>
+    
+  </template>
 
   <script type='application/dart' src ='selector_examples.dart'>
  
