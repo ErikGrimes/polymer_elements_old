@@ -97,6 +97,8 @@
     <div>Item 4</div>
     selected: {{emptyObservableString.value}}
     </polymer-selector>
+    
+
 
   <!-- polymer.js supports <polymer-select multi> -->
 
@@ -127,6 +129,22 @@
     </div>
     </template>
     
+    <h2>multi-selection with an empty ObservableList</h2>
+    <polymer-selector class='list' selected='{{emptyList}}' multi='{{true}}'>
+    <div>Item 0</div>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+    <div>Item 4</div>
+    </polymer-selector>
+    <h3>selected list</h3>
+    <ul>
+    <template repeat='{{selected in emptyList}}'>
+    <li>
+     {{selected}}
+    </li>
+    </template>
+    </ul>
     <h2>list</h2>
     <polymer-selector selected="{{'0'}}" items-selector="{{'li'}}">  
      <ul id='list'>
