@@ -3,7 +3,7 @@ library polymer_selector;
 import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
-import 'polymer_selection.dart';
+
 import 'dart:mirrors';
 
 /**
@@ -58,7 +58,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   Element _selectedItem;
   
   //TODO using PolymerSelection here throws a type exception
-  var _selection;
+  PolymerSelection _selection;
   
   StreamSubscription _selectedSub;
   
