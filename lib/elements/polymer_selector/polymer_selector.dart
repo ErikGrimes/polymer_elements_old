@@ -21,6 +21,8 @@ class PolymerSelector extends PolymerElement {
   
   //TODO polymer.js uses tap, but tap doesn't exist yet 
   
+  bool get applyAuthorStyles => true;
+  
   @published
   String activateEvent = 'click';
   
