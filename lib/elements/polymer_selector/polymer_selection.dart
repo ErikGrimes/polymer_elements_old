@@ -20,12 +20,14 @@ class PolymerSelectDetail {
 
 
 @CustomTag('polymer-selection')
-class PolymerSelection extends PolymerElement with ChangeNotifierMixin {
+class PolymerSelection extends PolymerElement {
   
   final List _selection = [];
   
+  @published
   bool multi = false;
   
+  @published
   var onPolymerSelect;
   
   get selection {

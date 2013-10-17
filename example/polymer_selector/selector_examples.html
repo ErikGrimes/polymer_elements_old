@@ -39,6 +39,7 @@
     }
     </style>
 
+<!-- 
   <h2>single select without selected</h2>
     <polymer-selector class="list">
     <div>Item 0</div>
@@ -48,9 +49,9 @@
     <div>Item 4</div>
  </polymer-selector>
 
-
+ 
       <h2>single select with selected empty</h2>
-    <polymer-selector class="list" selected="{{""}}">
+    <polymer-selector class="list" selected="">
     <div>Item 0</div>
     <div>Item 1</div>
     <div>Item 2</div>
@@ -59,18 +60,18 @@
     </polymer-selector>
 
   <h2>multi select without selected</h2>
-    <polymer-selector class="list" multi="{{true}}">
+    <polymer-selector class="list" multi="true">
     <div>Item 0</div>
     <div>Item 1</div>
     <div>Item 2</div>
     <div>Item 3</div>
     <div>Item 4</div>
     </polymer-selector>
-
+-->
   <!-- polymer.js supports literal syntax without the mustaches -->
-
+<!-- 
   <h2>single select initialized with literal</h2>
-    <polymer-selector class="list" selected="{{'0'}}">
+    <polymer-selector class="list" selected="0">
     <div>Item 0</div>
     <div>Item 1</div>
     <div>Item 2</div>
@@ -78,6 +79,7 @@
     <div>Item 4</div>
     </polymer-selector>
    
+
      <h2>single select initialized with ObservableBox</h2>
     <polymer-selector class="list" selected="{{observableString}}">
     <div>Item 0</div>
@@ -98,9 +100,11 @@
     selected: {{emptyObservableString.value}}
     </polymer-selector>
     
-
+-->
 
   <!-- polymer.js supports <polymer-select multi> -->
+
+<!-- 
 
     <h2>multi select initialized with literal list</h2>
     <polymer-selector class="list" selected="{{'0 1'}}" multi="{{true}}">
@@ -156,31 +160,32 @@
     </ul>
      
     </polymer-selector>
-   
+ -->
   
   <!-- polymer supports passing observables without observablebox -->
 
 
+
     <h2>binding of a group of radio buttons to a variable</h2>
-    <polymer-selector items-selector='{{"input[type=radio]"}}' 
-      selected='{{color}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
-      activate-event='{{"change"}}' on-polymer-activate='{{activate}}' on-polymer-select='{{select}}'>
+    <polymer-selector itemsSelector='{{"input[type=radio]"}}' 
+      selected='{{color}}' valueattr='{{"value"}}' selectedProperty='{{"checked"}}' 
+      activateEvent='{{"change"}}' onPolymerActivate='{{activate}}' onPolymerSelect='{{select}}'>
       <label><input type='radio' name='color' value='red'> Red</label> <br>
     <label><input type='radio' name='color' value='green'> Green</label> <br>
     <label><input type='radio' name='color' value='blue'> Blue</label> <br>
     <p>color = {{color.value}}</p>   
     <p>lastActivate = {{latestActivate}}</p>
-    <template if='{{latestSelect}}'
+    <template if='{{latestSelect}}'>
       <div>
       item: {{latestSelect.item.attributes['value']}} isSelected: {{latestSelect.isSelected}}
       </div>
     </template>
     </polymer-selector>
-  
+
       <h2>binding of a group of checkboxes to a variable</h2>
-    <polymer-selector items-selector='{{"input[type=checkbox]"}}' 
-      selected='{{checkboxColor}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
-      activate-event='{{"click"}}' 
+    <polymer-selector itemsSelector='{{"input[type=checkbox]"}}' 
+      selected='{{checkboxColor}}' valueattr='{{"value"}}' selectedProperty='{{"checked"}}' 
+      activateEvent='{{"click"}}' 
        selected-is-attribute='{{false}}'>
       <label><input type='checkbox' name='checkboxColor' value='red'> Red</label> <br>
     <label><input type='checkbox' name='checkboxColor' value='green'> Green</label> <br>
@@ -189,10 +194,10 @@
     </polymer-selector>
     
               <h2>binding of a group of checkboxes to a list</h2>
-    <polymer-selector items-selector='{{"input[type=checkbox]"}}' 
-      selected='{{checkboxMulti}}' valueattr='{{"value"}}' selected-property='{{"checked"}}' 
-      activate-event='{{"click"}}' 
-       selected-is-attribute='{{false}}' multi="{{true}}">
+    <polymer-selector itemsSelector='{{"input[type=checkbox]"}}' 
+      selected='{{checkboxMulti}}' valueattr='{{"value"}}' selectedProperty='{{"checked"}}' 
+      activateEvent='{{"click"}}' 
+       selectedIsAttribute='{{false}}' multi="{{true}}">
       <label><input type='checkbox' name='checkboxMulti' value='red'> Red</label> <br>
     <label><input type='checkbox' name='checkboxMulti' value='green'> Green</label> <br>
     <label><input type='checkbox' name='checkboxMulti' value='blue'> Blue</label> <br>
@@ -205,7 +210,7 @@
     </template>
     </ul>
     </polymer-selector>
-    
+
   </template>
 
   <script type='application/dart' src ='selector_examples.dart'>

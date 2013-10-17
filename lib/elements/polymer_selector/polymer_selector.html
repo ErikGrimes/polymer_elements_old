@@ -3,13 +3,12 @@
 
 <link rel='import' href='polymer_selection.html'>
 
-<polymer-element name='polymer-selector'
-  attributes='selected multi valueattr selected-class selected-property selected-is-attribute selected-item selected-model notap target items-selector activate-event on-polymer-select on-polymer-activate'>
+<polymer-element name='polymer-selector'>
    
   <template>
      <!-- polymer.js supports binding custom events as 'on-x' attributes -->
      <!-- pass in multi even though it doesn't work -->
-    <polymer-selection id='selection' multi='{{multi}}' on-polymer-select='{{_selectionSelect}}'>
+    <polymer-selection id='selection' multi='{{multi}}' onPolymerSelect='{{_selectionSelect}}'>
     </polymer-selection>
     <content id='items' select='*'></content>
     <content></content>

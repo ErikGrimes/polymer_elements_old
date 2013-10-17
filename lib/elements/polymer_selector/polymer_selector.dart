@@ -17,69 +17,57 @@ import 'dart:mirrors';
  */
 
 @CustomTag('polymer-selector')
-class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
-   
-  static const Symbol SELECTED = const Symbol('selected');
-  
-  static const Symbol SELECTED_ITEM = const Symbol('selectedItem');
-  
-  static const Symbol TARGET = const Symbol('target');
+class PolymerSelector extends PolymerElement {
   
   //TODO polymer.js uses tap, but tap doesn't exist yet 
+  
+  @published
   String activateEvent = 'click';
   
+  @published
   bool selectedIsAttribute = true;
   
+  @published
   String itemsSelector = '';
   
+  @published
   bool multi = false;
   
+  @published
   bool notap = false;
   
+  @published
   String selectedClass = 'polymer-selected';
   
+  @published
   String selectedProperty = 'active';
   
+  @published
   String valueattr = 'name';
 
+  @published
   var selectedModel;
   
+  @published
   var onPolymerSelect;
   
+  @published
   var onPolymerActivate;
   
-  Element _target;
+  @published
+  Element target;
   
-  Element __target;
-  
-  //TODO types for _selected, _selectedItem, selectedModel?
-  var _selected;
+  @published
+  var selected;
    
-  Element _selectedItem;
+  @published
+  Element selectedItem;
   
   //TODO using PolymerSelection here throws a type exception
   PolymerSelection _selection;
   
   StreamSubscription _selectedSub;
   
-  get target => _target;
-  
-  set target(Element value){
-    _target = notifyPropertyChange(TARGET, _target, value);
-  }
-  
-  get selected => _selected;
-  
-  set selected(value){
-    _selected = notifyPropertyChange(SELECTED, _selected, value);
-  }
-  
-  get selectedItem => _selectedItem;
-  
-  set selectedItem(value){
-    _selectedItem = notifyPropertyChange(SELECTED_ITEM, _selectedItem, value);
-  }
- 
   inserted(){
     _selection = this.shadowRoot.query('#selection').xtag;
     
@@ -93,7 +81,8 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
     _selection.multi = multi;
   
     _validateSelected();
-    this.changes.listen(_update);
+    
+    Observable.dirtyCheck();
     
   }
   
@@ -125,21 +114,9 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
       this._selection.clear();
   }
   
-  _update(List<ChangeRecord> records){
-    for(var cr in records){
-      if(cr.changes(SELECTED)){
-        _selectedChanged();
-      }
-      if(cr.changes(SELECTED_ITEM)){
-        _selectedItemChanged();  
-      }
-      if(cr.changes(TARGET)){
-        _targetChanged();  
-      }
-    }
-  }
+
   
-  _selectedChanged(){ 
+  selectedChanged(old){ 
     _validateSelected();
     if (this.multi) {
       this.clearSelection();
@@ -153,32 +130,34 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
     }
   }
   
-  _selectedItemChanged(){
+  selectedItemChanged(old){
     if(this.selectedItem != null){
-    var t = this.selectedItem.templateInstance;
-    if(t != null){
-      this.selectedModel = t.model;
-    }
-    }else {
+      var t = this.selectedItem.templateInstance;
+      if(t != null){
+        this.selectedModel = t.model;
+      }
+    } else {
       this.selectedModel = null;
     }
   }
   
   _validateSelected(){
-    if(this._selected == null){
+    if(this.selected == null){
       if(this.multi){
-        _selected = new ObservableList();
+        selected = new ObservableList();
       }else {
-        _selected = new ObservableBox();
+        selected = new ObservableBox();
       }
-     } else if(_selected is String){
-      var values = _selected.split(' ');
+     } else if(selected is String){
+      var values = selected.split(' ');
       if(this.multi){
-        _selected = new ObservableList.from(values);
+        selected = new ObservableList.from(values);
       }else {
-        _selected = new ObservableBox(_selected);   
+        selected = new ObservableBox(selected);   
       }
-    } else if (_selected is! ObservableBox && _selected is! ObservableList){
+     }else if(selected is int){
+       selected = new ObservableBox(selected.toString()); 
+    } else if (selected is! ObservableBox && selected is! ObservableList){
       throw 'selected should be a literal String, literal String list, ObservableBox<String> or ObservableList<String>';
     }
     
@@ -190,7 +169,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _observableSelectedChanged(crs){
-    _selectedChanged();
+    selectedChanged(null);
   }
   
   _valueToSelection(value) {
@@ -205,7 +184,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _valueToIndex(value) {
-  
+    print(items);
     for (var i=0, items=this.items; i< items.length; i++) {
         if (this._valueForNode(items[i]) == value) {
         return i;
@@ -219,14 +198,15 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
   }
   
   _valueForNode(node) {
+    print(node.attributes.keys);
     return node.attributes[this.valueattr];
   }
   
-  _targetChanged() {
-    if (__target != null) {
-      this._removeListener(__target);
+  targetChanged(old) {
+    if (old!= null) {
+      this._removeListener(old);
     }
-    __target = target;
+
     if (this.target != null) {
       this._addListener(this.target);
     }
@@ -258,7 +238,7 @@ class PolymerSelector extends PolymerElement with ChangeNotifierMixin {
       if(selectedIsAttribute){
         item.attributes[this.selectedProperty] = isSelected.toString();
       }else {
-        reflect(item).setField(new Symbol(this.selectedProperty), isSelected);
+        reflect(item).setField(const Symbol('checked'), isSelected);
       }
     }
   }
