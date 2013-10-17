@@ -184,7 +184,6 @@ class PolymerSelector extends PolymerElement {
   }
   
   _valueToIndex(value) {
-    print(items);
     for (var i=0, items=this.items; i< items.length; i++) {
         if (this._valueForNode(items[i]) == value) {
         return i;
@@ -198,7 +197,6 @@ class PolymerSelector extends PolymerElement {
   }
   
   _valueForNode(node) {
-    print(node.attributes.keys);
     return node.attributes[this.valueattr];
   }
   
